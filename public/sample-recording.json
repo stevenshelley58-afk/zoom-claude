@@ -1,0 +1,286 @@
+{
+  "recordingId": "rec_blank_mask_debug_001",
+  "createdAt": 1703520000000,
+  "events": [
+    {
+      "eventId": "evt_001",
+      "timestamp": 1703520000000,
+      "type": "flow_started",
+      "name": "ObjectRemoval",
+      "payload": {
+        "flowType": "ObjectRemoval",
+        "inputSource": "user_upload"
+      },
+      "artifactRefs": []
+    },
+    {
+      "eventId": "evt_002",
+      "timestamp": 1703520000100,
+      "type": "artifact_created",
+      "name": "RoomPhoto",
+      "payload": {
+        "width": 1920,
+        "height": 1080,
+        "format": "jpeg",
+        "sizeBytes": 2458624
+      },
+      "artifactRefs": [
+        { "artifactId": "art_room_photo", "role": "created" }
+      ]
+    },
+    {
+      "eventId": "evt_003",
+      "timestamp": 1703520000250,
+      "type": "artifact_created",
+      "name": "NormalizedPhoto",
+      "payload": {
+        "width": 1024,
+        "height": 576,
+        "normalized": true,
+        "colorSpace": "sRGB"
+      },
+      "artifactRefs": [
+        { "artifactId": "art_normalized_photo", "role": "created" }
+      ]
+    },
+    {
+      "eventId": "evt_004",
+      "timestamp": 1703520000400,
+      "type": "artifact_created",
+      "name": "MaskImage",
+      "payload": {
+        "width": 1024,
+        "height": 576,
+        "whitePixelCount": 0,
+        "coverage": 0,
+        "totalPixels": 589824
+      },
+      "artifactRefs": [
+        { "artifactId": "art_mask_image", "role": "created" }
+      ]
+    },
+    {
+      "eventId": "evt_005",
+      "timestamp": 1703520000450,
+      "type": "check_failed",
+      "name": "MaskHasContent",
+      "payload": {
+        "checkId": "chk_mask_content",
+        "passed": false
+      },
+      "artifactRefs": [
+        { "artifactId": "art_mask_image", "role": "checked" }
+      ]
+    },
+    {
+      "eventId": "evt_006",
+      "timestamp": 1703520000500,
+      "type": "external_call_started",
+      "name": "Gemini.inpaint",
+      "payload": {
+        "provider": "Gemini",
+        "operation": "inpaint",
+        "model": "gemini-2.0-flash",
+        "inputTokens": 1250
+      },
+      "artifactRefs": [
+        { "artifactId": "art_normalized_photo", "role": "input" },
+        { "artifactId": "art_mask_image", "role": "input" }
+      ]
+    },
+    {
+      "eventId": "evt_007",
+      "timestamp": 1703520003000,
+      "type": "external_call_completed",
+      "name": "Gemini.inpaint",
+      "payload": {
+        "provider": "Gemini",
+        "operation": "inpaint",
+        "duration": 2500,
+        "outputTokens": 0,
+        "status": "success"
+      },
+      "artifactRefs": []
+    },
+    {
+      "eventId": "evt_008",
+      "timestamp": 1703520003100,
+      "type": "artifact_created",
+      "name": "InpaintResult",
+      "payload": {
+        "width": 1024,
+        "height": 576,
+        "diffFromInput": 0.001,
+        "changedPixels": 590
+      },
+      "artifactRefs": [
+        { "artifactId": "art_inpaint_result", "role": "created" }
+      ]
+    },
+    {
+      "eventId": "evt_009",
+      "timestamp": 1703520003150,
+      "type": "check_failed",
+      "name": "ResultDiffersFromInput",
+      "payload": {
+        "checkId": "chk_result_diff",
+        "passed": false
+      },
+      "artifactRefs": [
+        { "artifactId": "art_inpaint_result", "role": "checked" }
+      ]
+    },
+    {
+      "eventId": "evt_010",
+      "timestamp": 1703520003200,
+      "type": "artifact_displayed",
+      "name": "InpaintResult",
+      "payload": {
+        "displayTarget": "main_canvas",
+        "rendered": true
+      },
+      "artifactRefs": [
+        { "artifactId": "art_inpaint_result", "role": "displayed" }
+      ]
+    },
+    {
+      "eventId": "evt_011",
+      "timestamp": 1703520003250,
+      "type": "flow_completed",
+      "name": "ObjectRemoval",
+      "payload": {
+        "success": false,
+        "duration": 3250,
+        "failureReason": "Quality checks failed"
+      },
+      "artifactRefs": []
+    }
+  ],
+  "artifacts": {
+    "art_room_photo": {
+      "artifactId": "art_room_photo",
+      "artifactType": "Image",
+      "properties": {
+        "name": "RoomPhoto",
+        "width": 1920,
+        "height": 1080,
+        "format": "jpeg",
+        "sizeBytes": 2458624,
+        "source": "user_upload"
+      },
+      "derivedFrom": [],
+      "createdAt": 1703520000100
+    },
+    "art_normalized_photo": {
+      "artifactId": "art_normalized_photo",
+      "artifactType": "Image",
+      "properties": {
+        "name": "NormalizedPhoto",
+        "width": 1024,
+        "height": 576,
+        "normalized": true,
+        "colorSpace": "sRGB",
+        "resizeMethod": "lanczos"
+      },
+      "derivedFrom": ["art_room_photo"],
+      "createdAt": 1703520000250
+    },
+    "art_mask_image": {
+      "artifactId": "art_mask_image",
+      "artifactType": "Mask",
+      "properties": {
+        "name": "MaskImage",
+        "width": 1024,
+        "height": 576,
+        "whitePixelCount": 0,
+        "coverage": 0,
+        "totalPixels": 589824,
+        "brushSize": 32,
+        "brushStrokes": 0
+      },
+      "derivedFrom": ["art_normalized_photo"],
+      "createdAt": 1703520000400
+    },
+    "art_inpaint_result": {
+      "artifactId": "art_inpaint_result",
+      "artifactType": "Image",
+      "properties": {
+        "name": "InpaintResult",
+        "width": 1024,
+        "height": 576,
+        "diffFromInput": 0.001,
+        "changedPixels": 590,
+        "model": "gemini-2.0-flash",
+        "generationTime": 2500
+      },
+      "derivedFrom": ["art_normalized_photo", "art_mask_image"],
+      "createdAt": 1703520003100
+    }
+  },
+  "checkResults": [
+    {
+      "checkId": "chk_mask_content",
+      "checkName": "MaskHasContent",
+      "passed": false,
+      "evidence": {
+        "whitePixelCount": 0,
+        "coverage": 0,
+        "threshold": 100
+      },
+      "message": "Mask is empty - no pixels painted",
+      "artifactRefs": ["art_mask_image"]
+    },
+    {
+      "checkId": "chk_result_diff",
+      "checkName": "ResultDiffersFromInput",
+      "passed": false,
+      "evidence": {
+        "diffFromInput": 0.001,
+        "threshold": 0.05,
+        "changedPixels": 590,
+        "totalPixels": 589824
+      },
+      "message": "AI result too similar - only 0.1% changed",
+      "artifactRefs": ["art_inpaint_result"]
+    }
+  ],
+  "metadata": {
+    "hasFailure": true,
+    "failureReason": "Blank mask caused AI to produce nearly identical output"
+  },
+  "indexes": {
+    "failedChecks": [
+      {
+        "checkId": "chk_mask_content",
+        "checkName": "MaskHasContent",
+        "passed": false,
+        "evidence": {
+          "whitePixelCount": 0,
+          "coverage": 0,
+          "threshold": 100
+        },
+        "message": "Mask is empty - no pixels painted",
+        "artifactRefs": ["art_mask_image"]
+      },
+      {
+        "checkId": "chk_result_diff",
+        "checkName": "ResultDiffersFromInput",
+        "passed": false,
+        "evidence": {
+          "diffFromInput": 0.001,
+          "threshold": 0.05,
+          "changedPixels": 590,
+          "totalPixels": 589824
+        },
+        "message": "AI result too similar - only 0.1% changed",
+        "artifactRefs": ["art_inpaint_result"]
+      }
+    ],
+    "artifactLineage": {
+      "art_room_photo": [],
+      "art_normalized_photo": ["art_room_photo"],
+      "art_mask_image": ["art_normalized_photo"],
+      "art_inpaint_result": ["art_normalized_photo", "art_mask_image"]
+    }
+  }
+}
